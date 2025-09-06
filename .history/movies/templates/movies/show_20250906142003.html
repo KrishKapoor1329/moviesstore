@@ -11,12 +11,14 @@
         <p><b>Price:</b> ${{ template_data.movie.price }}</p>
         <p class="card-text">
           <form method="post"
-            action="{% url 'cart.add' id=template_data.movie.id %}">
+            action="{% url 'cart.add'
+            id=template_data.movie.id %}">
             <div class="row">
               {% csrf_token %}
               <div class="col-auto">
                 <div class="input-group col-auto">
-                  <div class="input-group-text">Quantity</div>
+                  <div class="input-group-text">Quantity
+                    </div>
                   <input type="number" min="1" max="10"
                     class="form-control quantity-input"
                     name="quantity" value="1">
@@ -41,12 +43,19 @@
               {{ review.date }}
             </h6>
             <p class="card-text">{{ review.comment }}</p>
-            {% if user.is_authenticated and user == review.user %}
+            {% if user.is_authenticated and user ==
+                review.user %}
               <a class="btn btn-primary"
-                href="{% url 'movies.edit_review' id=template_data.movie.id review_id=review.id %}">Edit</a>
+                href="{% url 'movies.edit_review'
+                id=template_data.movie.id
+                review_id=review.id %}">Edit
+              </a>
               <a class="btn btn-danger"
-                href="{% url 'movies.delete_review' id=template_data.movie.id review_id=review.id %}">Delete</a>
-            {% endif %}
+              href="{% url 'movies.delete_review'
+              id=template_data.movie.id
+              review_id=review.id %}">Delete
+            </a>
+              {% endif %}
           </li>
           {% endfor %}
         </ul>
@@ -56,8 +65,11 @@
             <div class="col-12">
               <div class="card shadow p-3 mb-4 rounded">
                 <div class="card-body">
-                  <b class="text-start">Create a review</b><br /><br />
-                  <form method="POST" action="{% url 'movies.create_review' id=template_data.movie.id %}">
+                  <b class="text-start">Create a review
+                    </b><br /><br />
+                  <form method="POST" action=
+                    "{% url 'movies.create_review'
+                    id=template_data.movie.id %}">
                     {% csrf_token %}
                     <p>
                       <label for="comment">Comment:</label>
