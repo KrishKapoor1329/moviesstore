@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>{{ template_data.petition.title }}</h1>
+        <div>
+            <span class="badge bg-success me-2">
+                <i class="fas fa-thumbs-up"></i> Upvotes: {{ template_data.petition.get_upvote_count }}
+            </span>
+            <span class="badge bg-danger">
+                <i class="fas fa-thumbs-down"></i> Downvotes: {{ template_data.petition.get_downvote_count }}
+            </span>
+        </div>
+    </div>
+    
+    <p class="lead">{{ template_data.petition.description }}</p>
+    <hr>
+    <p><strong>Director:</strong> {{ template_data.petition.director|default:"N/A" }}</p>
+    <p><strong>Year:</strong> {{ template_data.petition.movie_year|default:"N/A" }}</p>
+    
+    <!-- Voting Section -->
+    <div class="my-4">
+        <h4>Cast Your Vote</h4>
+        {% if user.is_authenticated %}
+            <form action="{% url 'petitions.vote' template_data.petition.id %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="vote_type" value="up">
+                <button type="submit" class="btn btn-lg {% if template_data.user_vote.vote_type == 'up' %}btn-success{% else %}btn-outline-success{% endif %} me-2">
+                    <i class="fas fa-thumbs-up"></i> Upvote
+                </button>
+            </form>
+            <form action="{% url 'petitions.vote' template_data.petition.id %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="vote_type" value="down">
+                <button type="submit" class="btn btn-lg {% if template_data.user_vote.vote_type == 'down' %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                    <i class="fas fa-thumbs-down"></i> Downvote
+                </button>
+            </form>
+            {% if template_data.user_vote %}
+                <p class="mt-2"><small>You voted: {{ template_data.user_vote.get_vote_type_display }}</small></p>
+            {% endif %}
+        {% else %}
+            <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to vote.</p>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'petitions.index' %}" class="btn btn-secondary">Back to All Petitions</a>
+</div>
+{% endblock %}
